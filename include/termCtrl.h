@@ -155,7 +155,7 @@ static void tc_echoON(){
 #define tc_clrToBegLine() puts("\033[1K")
 
 // cursor
-#define tc_mvOrigine() puts("\033[0;0H")
+#define tc_mvOrigine() tc_mvPos(0, 0)
 #define tc_mvPos(X, Y) printf("\033[%d;%dH", Y, X)
 #define tc_mvUp(X) printf("\033[%dA", X)
 #define tc_mvDown(X) printf("\033[%dB", X)

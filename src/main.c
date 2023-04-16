@@ -7,8 +7,8 @@
 
 int main(){
 	setupConsole();
-	tc_cursorInvisible();
 	tc_altScreen();
+	tc_cursorInvisible();
 
 	char c = ' ';
 	int quit = 0;
@@ -47,8 +47,8 @@ int main(){
 		}
 	}while (!quit);
 
-	tc_exit_altScreen();
 	tc_cursorVisible();
+	tc_exit_altScreen();
 	restoreConsole();
 	return 0;
 }
