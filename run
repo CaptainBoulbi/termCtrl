@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gcc src/main.c src/demo1.c -o build/main -I include && ./build/main
