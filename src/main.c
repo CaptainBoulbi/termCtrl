@@ -23,7 +23,7 @@ int main(){
 		printf("[%s4%s] %sloading wheel animation%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
 		printf("[%sq%s] %squitter%s\n", TC_lYEL, TC_RES, TC_lRED, TC_RES);
 
-		tc_mvPos(33, 1);
+		tc_mvPos(33, 0);
 		c = getchar();
 
 		switch(c){
