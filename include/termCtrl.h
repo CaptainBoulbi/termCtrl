@@ -8,9 +8,6 @@
 #ifndef TERMINAL_CONTROL_H
 #define TERMINAL_CONTROL_H
 #include <stdio.h>
-#include <sys/ioctl.h>
-#include <termios.h>
-#include <unistd.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * this part of the code that enables the ANSI escape codes  *
@@ -32,40 +29,57 @@ static DWORD outModeInit;
 static void setupConsole(void) {
 	DWORD outMode = 0;
 	stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	if(stdoutHandle == INVALID_HANDLE_VALUE) {
+	if(stdoutHandle == INVALID_HANDLE_VALUE){
 		exit(GetLastError());
 	}
-	
-	if(!GetConsoleMode(stdoutHandle, &outMode)) {
+	if(!GetConsoleMode(stdoutHandle, &outMode)){
 		exit(GetLastError());
 	}
-
 	outModeInit = outMode;
 	
     // Enable ANSI escape codes
 	outMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-
-	if(!SetConsoleMode(stdoutHandle, outMode)) {
+	if(!SetConsoleMode(stdoutHandle, outMode)){
 		exit(GetLastError());
 	}	
 }
 
-static void restoreConsole(void) {
+static void restoreConsole(void){
     // Reset colors
     printf("\x1b[0m");	
-	
     // Reset console mode
-	if(!SetConsoleMode(stdoutHandle, outModeInit)) {
+	if(!SetConsoleMode(stdoutHandle, outModeInit)){
 		exit(GetLastError());
 	}
 }
-#else
-static void setupConsole(void) {}
+#else // now for superior OS
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <unistd.h>
 
-static void restoreConsole(void) {
+static void setupConsole(void){}
+static void restoreConsole(void){
     // Reset colors
     printf("\x1b[0m");
+}
+
+static void tc_getCoord(int *cols, int *rows){
+	struct winsize size;
+	ioctl(1, TIOCGWINSZ, &size);
+	*cols = size.ws_col;
+	*rows = size.ws_row;
+}
+static void tc_echoOFF(){
+	struct termios term;
+	tcgetattr(1, &term);
+	term.c_lflag &= ~ECHO;
+	tcsetattr(1, TCSANOW, &term);
+}
+static void tc_echoON(){
+	struct termios term;
+	tcgetattr(1, &term);
+	term.c_lflag |= ECHO;
+	tcsetattr(1, TCSANOW, &term);
 }
 #endif // activate ANSI escape codes on windows
 
@@ -76,7 +90,7 @@ static void restoreConsole(void) {
 #define TC_UDL "\033[4m"
 #define TC_BIK "\033[5m"
 #define TC_SWAP "\033[7m"
-#define TC_NRM "\033[22m"
+#define TC_nBOLD "\033[22m"
 #define TC_nITA "\033[23m"
 #define TC_nUDL "\033[24m"
 #define TC_nBIK "\033[25m"
@@ -124,31 +138,18 @@ static void restoreConsole(void) {
 #define TC_blCYA "\033[106m"
 #define TC_blWHI "\033[107m"
 
+// more precise color
+// 8 bit color (see ANSI escape sequences 8 bit color)
+#define tc_f8(X) printf("\033[38;5;%dm", X)
+#define tc_b8(X) printf("\033[48;5;%dm", X)
+// RGB
+#define tc_fRGB(R,G,B) printf("\033[38;2;%d;%d;%dm", R, G, B)
+#define tc_bRGB(R,G,B) printf("\033[48;2;%d;%d;%dm", R, G, B)
+
+// usefull things
 #define tc_clrScreen() puts("\x1B[2J")
-
 #define tc_mvCursor(X, Y) printf("\033[%d;%dH", Y, X)
-
 #define tc_altScreen() puts("\033[?1049h\033[H")
 #define tc_exit_altScreen() puts("\033[?1049l")
 
-static void tc_getCoord(int *cols, int *rows){
-	struct winsize size;
-	ioctl(1, TIOCGWINSZ, &size);
-	*cols = size.ws_col;
-	*rows = size.ws_row;
-}
-
-static void tc_echoOFF(){
-	struct termios term;
-	tcgetattr(1, &term);
-	term.c_lflag &= ~ECHO;
-	tcsetattr(1, TCSANOW, &term);
-}
-
-static void tc_echoON(){
-	struct termios term;
-	tcgetattr(1, &term);
-	term.c_lflag |= ECHO;
-	tcsetattr(1, TCSANOW, &term);
-}
 #endif // TERMINAL_CONTROL_H

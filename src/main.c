@@ -8,7 +8,8 @@ int main(){
 	tc_altScreen();
 
 	char c = ' ';
-	while (c!='1' && c!='q' && c!='2'){
+	int quit = 0;
+	do{
 		tc_clrScreen();
 		tc_mvCursor(0, 0);
 
@@ -19,20 +20,21 @@ int main(){
 
 		tc_mvCursor(33, 0);
 		c = getchar();
-	}
 
-	switch(c){
-		case 'q':
-			break;
-		case '1':
-			demo1();
-			break;
-		case '2':
-			demo2();
-			break;
-		default:
-			break;
-	}
+		switch(c){
+			case 'q':
+				quit = 1;
+				break;
+			case '1':
+				demo1();
+				break;
+			case '2':
+				demo2();
+				break;
+			default:
+				break;
+		}
+	}while (!quit);
 
 	tc_exit_altScreen();
 	restoreConsole();
