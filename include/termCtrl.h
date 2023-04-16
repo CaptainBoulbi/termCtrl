@@ -49,8 +49,6 @@ static void setupConsole(void) {
 	if(!SetConsoleMode(stdoutHandle, outMode)) {
 		exit(GetLastError());
 	}	
-
-	printf("[ \033[1,32mColor Setuped\033[0m ]\n");
 }
 
 static void restoreConsole(void) {
@@ -71,49 +69,83 @@ static void restoreConsole(void) {
 }
 #endif // activate ANSI escape codes on windows
 
-#define TC_BOLD  "\033[0m"
+// style
+#define TC_RES "\033[0m"
+#define TC_BOLD "\033[1m"
+#define TC_ITA "\033[3m"
+#define TC_UDL "\033[4m"
+#define TC_BIK "\033[5m"
+#define TC_SWAP "\033[7m"
+#define TC_NRM "\033[22m"
+#define TC_nITA "\033[23m"
+#define TC_nUDL "\033[24m"
+#define TC_nBIK "\033[25m"
+#define TC_nSWAP "\033[27m"
+#define TC_DEF "\033[39m"
+#define TC_bDEF "\033[49m"
 
-#define TC_NRM  "\x1B[0m"
-#define TC_RED  "\x1B[1;31m"
-#define TC_GRN  "\x1B[1;32m"
-#define TC_YEL  "\x1B[1;33m"
-#define TC_BLU  "\x1B[1;34m"
-#define TC_MAG  "\x1B[1;35m"
-#define TC_CYN  "\x1B[1;36m"
-#define TC_WHT  "\x1B[1;37m"
+// forground color
+#define TC_BLK "\033[30m"
+#define TC_RED "\033[31m"
+#define TC_GRN "\033[32m"
+#define TC_YEL "\033[33m"
+#define TC_BLU "\033[34m"
+#define TC_MAG "\033[35m"
+#define TC_CYA "\033[36m"
+#define TC_WHI "\033[37m"
 
-#define TC_BG_NRM "\x1B[40m"
-#define TC_BG_RED " \x1B[41m"
-#define TC_BG_GRN "\x1B[42m"
-#define TC_BG_YEL "\x1B[43m"
-#define TC_BG_BLU "\x1B[44m"
-#define TC_BG_MAG "\x1B[45m"
-#define TC_BG_CYN "\x1B[46m"
-#define TC_BG_WHT "\x1B[47m"
+// light/bright version forground color
+#define TC_lBLK "\033[90m"
+#define TC_lRED "\033[91m"
+#define TC_lGRN "\033[92m"
+#define TC_lYEL "\033[93m"
+#define TC_lBLU "\033[94m"
+#define TC_lMAG "\033[95m"
+#define TC_lCYA "\033[96m"
+#define TC_lWHI "\033[97m"
 
-#define tc_clear_screen() puts("\x1B[2J")
+// background color
+#define TC_bBLK "\033[40m"
+#define TC_bRED "\033[41m"
+#define TC_bGRN "\033[42m"
+#define TC_bYEL "\033[43m"
+#define TC_bBLU "\033[44m"
+#define TC_bMAG "\033[45m"
+#define TC_bCYA "\033[46m"
+#define TC_bWHI "\033[47m"
 
-#define tc_move_cursor(X, Y) printf("\033[%d;%dH", Y, X)
+// light/bright version backgroung color
+#define TC_blBLK "\033[100m"
+#define TC_blRED "\033[101m"
+#define TC_blGRN "\033[102m"
+#define TC_blYEL "\033[103m"
+#define TC_blBLU "\033[104m"
+#define TC_blMAG "\033[105m"
+#define TC_blCYA "\033[106m"
+#define TC_blWHI "\033[107m"
 
-#define tc_enter_alt_screen() puts("\033[?1049h\033[H")
-#define tc_exit_alt_screen() puts("\033[?1049l")
+#define tc_clrScreen() puts("\x1B[2J")
 
-static void tc_get_cols_rows(int *cols, int *rows){
+#define tc_mvCursor(X, Y) printf("\033[%d;%dH", Y, X)
+
+#define tc_altScreen() puts("\033[?1049h\033[H")
+#define tc_exit_altScreen() puts("\033[?1049l")
+
+static void tc_getCoord(int *cols, int *rows){
 	struct winsize size;
 	ioctl(1, TIOCGWINSZ, &size);
 	*cols = size.ws_col;
 	*rows = size.ws_row;
 }
 
-static void tc_echo_off(){
+static void tc_echoOFF(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag &= ~ECHO;
 	tcsetattr(1, TCSANOW, &term);
 }
 
-static void tc_echo_on(){
-
+static void tc_echoON(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag |= ECHO;

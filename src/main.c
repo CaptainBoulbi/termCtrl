@@ -1,21 +1,23 @@
 #include <stdio.h>
 #include "termCtrl.h"
 #include "demo1.h"
+#include "demo2.h"
 
 int main(){
 	setupConsole();
-	tc_enter_alt_screen();
+	tc_altScreen();
 
 	char c = ' ';
-	while (c != '1' && c != 'q'){
-		tc_clear_screen();
-		tc_move_cursor(0, 0);
+	while (c!='1' && c!='q' && c!='2'){
+		tc_clrScreen();
+		tc_mvCursor(0, 0);
 
 		printf("Quelle demo voulez vous lancé :  \n\n");
-		printf("[%s1%s] %scadre recadrer%s\n", TC_GRN, TC_NRM, TC_CYN, TC_NRM);
-		printf("[%sq%s] %squitter%s\n", TC_YEL, TC_NRM, TC_RED, TC_NRM);
+		printf("[%s1%s] %scadre recadrer%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
+		printf("[%s2%s] %sliste couleur/style%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
+		printf("[%sq%s] %squitter%s\n", TC_lYEL, TC_RES, TC_lRED, TC_RES);
 
-		tc_move_cursor(33, 0);
+		tc_mvCursor(33, 0);
 		c = getchar();
 	}
 
@@ -24,11 +26,15 @@ int main(){
 			break;
 		case '1':
 			demo1();
+			break;
+		case '2':
+			demo2();
+			break;
 		default:
 			break;
 	}
 
-	tc_exit_alt_screen();
+	tc_exit_altScreen();
 	restoreConsole();
 	return 0;
 }
