@@ -39,8 +39,6 @@ void demo4(){
 		tc_mvOrigine();
 		printf("[ %s/%s ]\n", TC_RED, TC_DEF);
 		sleep(1);
-
-		tc_echoON();
 	}
 
 	tc_echoON();
