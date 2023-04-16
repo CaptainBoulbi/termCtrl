@@ -10,7 +10,7 @@ void drawFrame(){
 	tc_getCoord(&col, &row);
 
 	int crow = 1;
-	tc_mvCursor(1, crow);
+	tc_mvPos(1, crow);
 
 	printf("+");
 	for (int i=2; i<col; i++){
@@ -19,7 +19,7 @@ void drawFrame(){
 	printf("+");
 
 	for (int y=3; y<row; y++){
-		tc_mvCursor(1, ++crow);
+		tc_mvPos(1, ++crow);
 		printf("|");
 		for (int i=2; i<col; i++){
 			printf(" ");
@@ -27,7 +27,7 @@ void drawFrame(){
 		printf("|");
 	}
 
-	tc_mvCursor(1, ++crow);
+	tc_mvPos(1, ++crow);
 	printf("+");
 	for (int i=2; i<col; i++){
 		printf("-");
@@ -35,7 +35,7 @@ void drawFrame(){
 	printf("+\n");
 	printf("[ %s%sSTATUS%s ] %sPress q to close%s", TC_BOLD, TC_YEL, TC_RES, TC_MAG, TC_RES);
 
-	tc_mvCursor((col-15)/2, row/2);
+	tc_mvPos((col-15)/2, row/2);
 	printf("[ %sDICK%s ] %s%s8====D%s",TC_RED, TC_RES, TC_BOLD, TC_YEL, TC_RES);
 
 	fflush(stdout);

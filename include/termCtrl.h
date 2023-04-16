@@ -146,10 +146,33 @@ static void tc_echoON(){
 #define tc_fRGB(R,G,B) printf("\033[38;2;%d;%d;%dm", R, G, B)
 #define tc_bRGB(R,G,B) printf("\033[48;2;%d;%d;%dm", R, G, B)
 
-// usefull things
-#define tc_clrScreen() puts("\x1B[2J")
-#define tc_mvCursor(X, Y) printf("\033[%d;%dH", Y, X)
+// erase
+#define tc_clrScreen() puts("\033[2J")
+#define tc_clrToEnd() puts("\033[0J")
+#define tc_clrToBeg() puts("\033[1J")
+#define tc_clrLine() puts("\033[2K")
+#define tc_clrToEndLine() puts("\033[0K")
+#define tc_clrToBegLine() puts("\033[1K")
+
+// cursor
+#define tc_mvOrigine() puts("\033[H")
+#define tc_mvPos(X, Y) printf("\033[%d;%dH", Y, X)
+#define tc_mvUp(X) printf("\033[%dA", X)
+#define tc_mvDown(X) printf("\033[%dB", X)
+#define tc_mvRight(X) printf("\033[%dC", X)
+#define tc_mvLeft(X) printf("\033[%dD", X)
+#define tc_mvBeginDown(X) printf("\033[%dE", X)
+#define tc_mvBeginUp(X) printf("\033[%dF", X)
+#define tc_mvCol(X) printf("\033[%dG", X)
+#define tc_savePos() puts("\033 7")
+#define tc_loadPos() puts("\033 8")
+#define tc_cursorInvisible() puts("\033[?25l")
+#define tc_cursorVisible() puts("\033[?25h")
+
+// screen
 #define tc_altScreen() puts("\033[?1049h\033[H")
 #define tc_exit_altScreen() puts("\033[?1049l")
+#define tc_saveScreen() puts("\033[?47h")
+#define tc_loadScreen() puts("\033[?47l")
 
 #endif // TERMINAL_CONTROL_H
