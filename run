@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gcc demo/main.c demo/demo1.c demo/demo2.c demo/demo3.c demo/demo4.c -o build/main -I include/ -I src/ && ./build/main
