@@ -52,6 +52,8 @@ void demo2(){
 	printf("[ %sTC_BIK%s ]\n", TC_BIK, TC_nBIK);
 	printf("[ %s%scolor %sTC_SWAP%s ]%s\n", TC_RED, TC_bBLU, TC_SWAP, TC_nSWAP, TC_RES);
 	printf("[ %sforground %sbackground %sdefault forground %sdefault background re%sZet ]\n", TC_RED, TC_bBLU, TC_DEF, TC_bDEF, TC_RES);
+	printf("[ TC_HID ] password : %simabanana%s ham\n", TC_HID, TC_nHID);
+	printf("[ TC_STR ] lol %sidk wat it%s is\n", TC_STR, TC_nSTR);
 
 	printf("\n%s[ %sLIST%s ] more color :%s\n\n", TC_blBLK, TC_lCYA, TC_DEF, TC_RES);
 

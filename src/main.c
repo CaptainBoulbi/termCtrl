@@ -5,7 +5,6 @@
 #include "demo2.h"
 #include "demo3.h"
 #include "demo4.h"
-#include "demo5.h"
 
 int main(){
 	setupConsole();
@@ -23,7 +22,6 @@ int main(){
 		printf("[%s2%s] %sliste couleur/style%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
 		printf("[%s3%s] %sloading animation%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
 		printf("[%s4%s] %sloading wheel animation%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
-		printf("[%s5%s] %stest move/erase fonction%s\n", TC_lGRN, TC_RES, TC_lCYA, TC_RES);
 		printf("[%sq%s] %squitter%s\n", TC_lYEL, TC_RES, TC_lRED, TC_RES);
 
 		tc_mvPos(33, 0);
@@ -44,9 +42,6 @@ int main(){
 				break;
 			case '4':
 				demo4();
-				break;
-			case '5':
-				demo5();
 				break;
 			default:
 				break;

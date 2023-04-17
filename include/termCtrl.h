@@ -90,12 +90,16 @@ static void tc_echoON(){
 #define TC_UDL "\033[4m"
 #define TC_BIK "\033[5m"
 #define TC_SWAP "\033[7m"
+#define TC_HID "\033[8m"
+#define TC_STR "\033[9m"
+#define TC_DEF "\033[39m"
 #define TC_nBOLD "\033[22m"
 #define TC_nITA "\033[23m"
 #define TC_nUDL "\033[24m"
 #define TC_nBIK "\033[25m"
 #define TC_nSWAP "\033[27m"
-#define TC_DEF "\033[39m"
+#define TC_nHID "\033[28m"
+#define TC_nSTR "\033[29m"
 #define TC_bDEF "\033[49m"
 
 // forground color
