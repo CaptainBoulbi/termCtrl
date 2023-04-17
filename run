@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc src/main.c src/demo1.c src/demo2.c src/demo3.c src/demo4.c -o build/main -I include && ./build/main
+gcc demo/main.c demo/demo1.c demo/demo2.c demo/demo3.c demo/demo4.c -o build/main -I include/ -I src/ && ./build/main

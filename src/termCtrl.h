@@ -3,17 +3,15 @@
  * you can code see his code here :                                *
  * https://gitlab.com/greggink/youtube_episode_control_terminal    *
  * https://gitlab.com/greggink/youtube_episode_terminal_control_2  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * the part of the code that enables the ANSI escape codes for     *
+ * Windows is inspired by Paul Silisteanu on his site :            *
+ * https://solarianprogrammer.com/contact/                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #ifndef TERMINAL_CONTROL_H
 #define TERMINAL_CONTROL_H
 #include <stdio.h>
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * this part of the code that enables the ANSI escape codes  *
- * was copied from Paul Silisteanu on his site :             *
- * https://solarianprogrammer.com/contact/                   *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #ifdef _WIN32 // activate ANSI escape codes on windows
 #include <windows.h>
