@@ -18,12 +18,15 @@ build/demo3.o : demo/demo3.c src/termCtrl.h
 build/demo4.o : demo/demo4.c src/termCtrl.h
 	gcc -c demo/demo4.c -I include -I src -o build/demo4.o
 
+.PHONY : clean
 clean :
 	rm build/*
 
+.PHONY : run
 run : build/main
 	./build/main
 
+.PHONY : dev
 dev : build/main
 	cppcheck --enable=all --suppress=missingIncludeSystem -I include/ .
 	flawfinder .
