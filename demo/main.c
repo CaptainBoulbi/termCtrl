@@ -11,7 +11,6 @@ int main(){
 	tc_altScreen();
 	tc_cursorInvisible();
 
-	char c = ' ';
 	int quit = 0;
 	do{
 		tc_clrScreen();
@@ -25,7 +24,7 @@ int main(){
 		printf("[%sq%s] %squitter%s", TC_lYEL, TC_RES, TC_lRED, TC_RES);
 
 		tc_mvPos(33, 0);
-		c = getchar();
+		char c = getchar();
 
 		switch(c){
 			case 'q':
