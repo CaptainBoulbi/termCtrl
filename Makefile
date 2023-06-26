@@ -1,5 +1,10 @@
 obj = build/main.o build/demo1.o build/demo2.o build/demo3.o build/demo4.o
 
+all : pre-build build/main
+
+pre-build :
+	mkdir -p build
+
 build/main : $(obj)
 	gcc -o build/main $(obj)
 
@@ -23,10 +28,10 @@ clean :
 	rm build/*
 
 .PHONY : run
-run : build/main
+run : all
 	./build/main
 
 .PHONY : dev
-dev : build/main
+dev : all
 	cppcheck --enable=all --suppress=missingIncludeSystem -I include/ .
 	flawfinder .
