@@ -34,7 +34,8 @@ static void restoreConsole(void){
 	if(!SetConsoleMode(stdoutHandle, outModeInit)){
 		exit(GetLastError());
 	}
-}
+} 
+#else
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
