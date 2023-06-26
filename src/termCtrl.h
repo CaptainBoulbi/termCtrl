@@ -35,6 +35,25 @@ static void restoreConsole(void){
 		exit(GetLastError());
 	}
 } 
+
+#include <stdio.h>
+#include <unistd.h>
+
+static void setupConsole(void){}
+static void restoreConsole(void){
+    printf("\x1b[0m");
+}
+
+static void tc_getCoord(int *cols, int *rows){
+	//get fucked
+}
+static void tc_echoOFF(){
+	//get fucked
+}
+static void tc_echoON(){
+	//get fucked
+}
+
 #else
 #include <sys/ioctl.h>
 #include <termios.h>
