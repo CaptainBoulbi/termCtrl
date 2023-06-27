@@ -3,7 +3,7 @@
 
 void demo3(){
 	tc_clrScreen();
-	tc_echoOFF();
+	tc_echo_off();
 
 	while (1){
 		tc_clrScreen();
@@ -37,5 +37,5 @@ void demo3(){
 		sleep(1);
 	}
 
-	tc_echoON();
+	tc_echo_on();
 }

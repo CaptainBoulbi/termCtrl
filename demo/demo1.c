@@ -2,11 +2,11 @@
 #include <signal.h>
 #include "termCtrl.h"
 
-int EndOfLine(int w){
-	int col;
-	tc_getCoord(&col, NULL);
-	return (w == col);
-}
+//int EndOfLine(int w){
+//	int col;
+//	tc_getCoord(&col, NULL);
+//	return (w == col);
+//}
 
 void drawHor(int n, char c){
 	for (int i=0; i<n; i++){
@@ -65,12 +65,12 @@ void drawFrame(){
 }
 
 void demo1(){
-	tc_echoOFF();
+	tc_echo_off();
 
 	signal(SIGWINCH, &drawFrame);
 	drawFrame();
 
 	while (getchar() != 'q');
 
-	tc_echoON();
+	tc_echo_on();
 }

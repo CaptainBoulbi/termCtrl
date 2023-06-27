@@ -3,7 +3,7 @@
 
 void demo2(){
 	tc_clrScreen();
-	tc_echoOFF();
+	tc_echo_off();
 	tc_mvOrigine();
 
 	printf("%s[ %sLIST%s ] color :%s\n\n", TC_blBLK, TC_lCYA, TC_DEF, TC_RES);
@@ -72,5 +72,5 @@ void demo2(){
 	printf("\n%s[ %sQUIT%s ] Press q to quit %s", TC_blBLK, TC_lRED, TC_DEF, TC_RES);
 	while (getchar() != 'q');
 
-	tc_echoON();
+	tc_echo_on();
 }
