@@ -31,7 +31,7 @@ clean :
 	rm build/*
 
 .PHONY : clean-run
-clean-run : clean all
+clean-run : clean run
 
 .PHONY : run
 run : all
