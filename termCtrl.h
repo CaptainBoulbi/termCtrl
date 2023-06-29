@@ -16,11 +16,7 @@
 static HANDLE stdoutHandle;
 static DWORD outModeInit;
 
-<<<<<<< HEAD
-static void setupConsole(void) {
-=======
 void setupConsole(void) {
->>>>>>> dev
 	DWORD outMode = 0;
 	stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(stdoutHandle == INVALID_HANDLE_VALUE){
@@ -37,11 +33,7 @@ void setupConsole(void) {
 	}	
 }
 
-<<<<<<< HEAD
-static void restoreConsole(void){
-=======
 void restoreConsole(void){
->>>>>>> dev
     printf("\x1b[0m");	
 	if(!SetConsoleMode(stdoutHandle, outModeInit)){
 		exit(GetLastError());
@@ -52,15 +44,9 @@ void restoreConsole(void){
 #include <unistd.h>
 
 // TODO
-<<<<<<< HEAD
-static void tc_getCoord(int *cols, int *rows);
-static void tc_echo_off();
-static void tc_echo_on();
-=======
 void tc_getCoord(int *cols, int *rows);
 void tc_echo_off();
 void tc_echo_on();
->>>>>>> dev
 void tc_canon_on();
 void tc_canon_on();
 
@@ -70,41 +56,24 @@ void tc_canon_on();
 #include <termios.h>
 #include <unistd.h>
 
-<<<<<<< HEAD
-static void setupConsole(void){}
-static void restoreConsole(void){
-printf("\x1b[0m");
-}
-
-static void tc_getCoord(int *cols, int *rows){
-=======
 void setupConsole(void){}
 void restoreConsole(void){
 printf("\x1b[0m");
 }
 
 void tc_getCoord(int *cols, int *rows){
->>>>>>> dev
 	struct winsize size;
 	ioctl(1, TIOCGWINSZ, &size);
 	*cols = size.ws_col;
 	*rows = size.ws_row;
 }
-<<<<<<< HEAD
-static void tc_echo_off(){
-=======
 void tc_echo_off(){
->>>>>>> dev
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag &= ~ECHO;
 	tcsetattr(1, TCSANOW, &term);
 }
-<<<<<<< HEAD
-static void tc_echo_on(){
-=======
 void tc_echo_on(){
->>>>>>> dev
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag |= ECHO;
@@ -252,22 +221,14 @@ void tc_echo_on(){
 
 #define RAW_INPUT_SIZE 120
 
-<<<<<<< HEAD
-static void tc_canon_on(){
-=======
 void tc_canon_on(){
->>>>>>> dev
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag |= ICANON;
 	tcsetattr(1, TCSANOW, &term);
 }
 
-<<<<<<< HEAD
-static void tc_canon_off(){
-=======
 void tc_canon_off(){
->>>>>>> dev
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag &= ~ICANON;
@@ -349,11 +310,7 @@ static void t_process_keycode(ti *t){
 	}
 }
 
-<<<<<<< HEAD
-static ti* tc_init_input( void (*func)(), void *data){
-=======
 ti* tc_init_input( void (*func)(), void *data){
->>>>>>> dev
 	ti *t = (ti *) malloc(sizeof(ti));
 	memset(t, 0, sizeof(ti));
 	tc_canon_off();
