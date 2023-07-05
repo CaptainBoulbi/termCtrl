@@ -16,7 +16,7 @@
 static HANDLE stdoutHandle;
 static DWORD outModeInit;
 
-static void setupConsole(void) {
+void setupConsole(void) {
 	DWORD outMode = 0;
 	stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(stdoutHandle == INVALID_HANDLE_VALUE){
@@ -33,7 +33,7 @@ static void setupConsole(void) {
 	}	
 }
 
-static void restoreConsole(void){
+void restoreConsole(void){
     printf("\x1b[0m");	
 	if(!SetConsoleMode(stdoutHandle, outModeInit)){
 		exit(GetLastError());
@@ -44,9 +44,9 @@ static void restoreConsole(void){
 #include <unistd.h>
 
 // TODO
-static void tc_getCoord(int *cols, int *rows);
-static void tc_echo_off();
-static void tc_echo_on();
+void tc_getCoord(int *cols, int *rows);
+void tc_echo_off();
+void tc_echo_on();
 void tc_canon_on();
 void tc_canon_on();
 
@@ -56,24 +56,24 @@ void tc_canon_on();
 #include <termios.h>
 #include <unistd.h>
 
-static void setupConsole(void){}
-static void restoreConsole(void){
+void setupConsole(void){}
+void restoreConsole(void){
 printf("\x1b[0m");
 }
 
-static void tc_getCoord(int *cols, int *rows){
+void tc_getCoord(int *cols, int *rows){
 	struct winsize size;
 	ioctl(1, TIOCGWINSZ, &size);
 	*cols = size.ws_col;
 	*rows = size.ws_row;
 }
-static void tc_echo_off(){
+void tc_echo_off(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag &= ~ECHO;
 	tcsetattr(1, TCSANOW, &term);
 }
-static void tc_echo_on(){
+void tc_echo_on(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag |= ECHO;
@@ -221,14 +221,14 @@ static void tc_echo_on(){
 
 #define RAW_INPUT_SIZE 120
 
-static void tc_canon_on(){
+void tc_canon_on(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag |= ICANON;
 	tcsetattr(1, TCSANOW, &term);
 }
 
-static void tc_canon_off(){
+void tc_canon_off(){
 	struct termios term;
 	tcgetattr(1, &term);
 	term.c_lflag &= ~ICANON;
@@ -310,7 +310,7 @@ static void t_process_keycode(ti *t){
 	}
 }
 
-static ti* tc_init_input( void (*func)(), void *data){
+ti* tc_init_input( void (*func)(), void *data){
 	ti *t = (ti *) malloc(sizeof(ti));
 	memset(t, 0, sizeof(ti));
 	tc_canon_off();

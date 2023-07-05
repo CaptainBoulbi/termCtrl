@@ -79,6 +79,19 @@ void tc_echo_on(){
 	term.c_lflag |= ECHO;
 	tcsetattr(1, TCSANOW, &term);
 }
+void tc_canon_on(){
+	struct termios term;
+	tcgetattr(1, &term);
+	term.c_lflag |= ICANON;
+	tcsetattr(1, TCSANOW, &term);
+}
+
+void tc_canon_off(){
+	struct termios term;
+	tcgetattr(1, &term);
+	term.c_lflag &= ~ICANON;
+	tcsetattr(1, TCSANOW, &term);
+}
 
 #endif
 
@@ -168,158 +181,5 @@ void tc_echo_on(){
 #define tc_exit_altScreen() puts("\033[?1049l")
 #define tc_saveScreen() puts("\033[?47h")
 #define tc_loadScreen() puts("\033[?47l")
-
-// KEY
-
-#include <stdint.h>
-#include <pthread.h>
-#include <string.h>
-#include <stdlib.h>
-//#include <time.h>
-
-#ifndef NULL
-#define NULL '\0'
-#endif
-
-#define TC_ESCAPE 0x1b
-#define TC_F1 0x1b4f50
-#define TC_F1_TTY 0x1b5b5b41
-#define TC_F2 0x1b4f51
-#define TC_F2_TTY 0x1b5b5b42
-#define TC_F3 0x1b4f52
-#define TC_F3_TTY 0x1b5b5b43
-#define TC_F4 0x1b4f53
-#define TC_F4_TTY 0x1b5b5b44
-#define TC_F5 0x1b5b31357e
-#define TC_F5_TTY 0x1b5b5b45
-#define TC_F6 0x1b5b31377e
-#define TC_F7 0x1b5b31387e
-#define TC_F8 0x1b5b31397e
-#define TC_F9 0x1b5b32307e
-#define TC_F10 0x1b5b32317e
-#define TC_F11 0x1b5b32337e
-#define TC_F12 0x1b5b32347e
-
-#define TC_ARROW_UP 0x1b5b41
-#define TC_ARROW_DOWN 0x1b5b42
-#define TC_ARROW_LEFT 0x1b5b44
-#define TC_ARROW_RIGHT 0x1b5b43
-
-#define TC_TAB 0x9
-#define TC_RETURN 0xa
-#define TC_ENTER 0xa
-
-#define TC_INSERT 0x1b5b327e
-#define TC_HOME 0x1b5b48
-#define TC_PAGE_UP 0x1b5b357e
-#define TC_DELETE 0x1b5b337e
-#define TC_END 0x1b5b46
-#define TC_PAGE_DOWN 0x1b5b367e
-
-#define TC_EURO 0xffffffffffe181ac
-#define TC_GBP 0xffffffffffffc1a3
-
-#define RAW_INPUT_SIZE 120
-
-void tc_canon_on(){
-	struct termios term;
-	tcgetattr(1, &term);
-	term.c_lflag |= ICANON;
-	tcsetattr(1, TCSANOW, &term);
-}
-
-void tc_canon_off(){
-	struct termios term;
-	tcgetattr(1, &term);
-	term.c_lflag &= ~ICANON;
-	tcsetattr(1, TCSANOW, &term);
-}
-
-typedef struct _raw_input raw_input;
-typedef struct _tc_inp ti;
-
-struct _raw_input{
-	struct timespec tp;
-	char c;
-};
-
-struct _tc_inp{
-	raw_input ri[RAW_INPUT_SIZE];
-	void (*key_cb) (uint64_t key, void *data);
-	void *data;
-};
-
-static void t_process_thread(ti *t){
-	//if we get two bytes within 100,000 nanosecs, it is part of the same keystroke
-	//every keystroke, up to 6 scan codes
-	int ri_index = 0;
-	int n = 1;
-	while(n){
-		//is there non-blocking version of fread or read?
-		n = fread( &((t->ri[ri_index]).c) , 1, 1, stdin);
-		clock_gettime(CLOCK_MONOTONIC, &((t->ri[ri_index]).tp) );
-		ri_index += 1;
-		if(ri_index >= RAW_INPUT_SIZE){
-			ri_index = 0;
-		}
-	}
-}
-
-static void t_process_keycode(ti *t){
-	int i = 0;
-	uint64_t key = 0;
-	uint64_t time;
-	uint64_t next_time;
-	void (*key_cb) (uint64_t c, void *data);
-	while(1){
-		while( !((t->ri[i]).tp.tv_nsec) ) {
-			usleep(10000);
-			//nanosleep(10000);
-		}
-		usleep(100);
-		//nanosleep(10000);
-		key = (t->ri[i]).c;
-		time = ((t->ri[i]).tp.tv_sec) * 1000000000;
-		time += ((t->ri[i]).tp.tv_nsec);
-		(t->ri[i]).tp.tv_nsec = 0;
-		i += 1;
-		if(i >= RAW_INPUT_SIZE){
-			i = 0;
-		}
-		if( (t->ri[i]).tp.tv_nsec ){
-			next_time = ((t->ri[i]).tp.tv_sec) * 1000000000;
-			next_time += ((t->ri[i]).tp.tv_nsec);
-			while(next_time - time < 100000){	//100,000 nanoseconds
-				key <<= 8;
-				key += (t->ri[i]).c;
-				time = next_time;
-				(t->ri[i]).tp.tv_nsec = 0;
-				i += 1;
-				if(i >= RAW_INPUT_SIZE){
-					i = 0;
-				}
-				next_time = ((t->ri[i]).tp.tv_sec) * 1000000000;
-				next_time += ((t->ri[i]).tp.tv_nsec);
-			}
-		}
-		key_cb = t->key_cb;
-		if(key_cb){
-			(*key_cb)(key, t->data);
-		}
-		key = 0;
-	}
-}
-
-ti* tc_init_input( void (*func)(), void *data){
-	ti *t = (ti *) malloc(sizeof(ti));
-	memset(t, 0, sizeof(ti));
-	tc_canon_off();
-	t->key_cb = func;
-	t->data = data;
-	pthread_t thid, thid2;
-	pthread_create(&thid, NULL, (void *) &t_process_thread, (void *) t);
-	pthread_create(&thid2, NULL, (void *) &t_process_keycode, (void *) t);
-	return t;
-}
 
 #endif
